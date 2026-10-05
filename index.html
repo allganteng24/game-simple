@@ -1,0 +1,3614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kenal Alief - Quiz & Game</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:white;
+  background:
+    radial-gradient(circle at top,#145486 0,#061a30 45%,#020b15 100%);
+}
+
+.app{
+  width:min(94vw,460px);
+  margin:auto;
+  padding:20px 0 40px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* ================= UMUM ================= */
+
+.logo{
+  text-align:center;
+  font-size:65px;
+  margin-top:20px;
+}
+
+h1{
+  text-align:center;
+  color:#25c9ff;
+  margin:5px 0;
+}
+
+h2{
+  text-align:center;
+}
+
+h3{
+  color:#4bd6ff;
+}
+
+.subtitle{
+  text-align:center;
+  color:#9db9ce;
+  line-height:1.5;
+}
+
+.card{
+  background:linear-gradient(
+    145deg,
+    #0d2948,
+    #07192d
+  );
+
+  border:1px solid #1b5d8b;
+
+  border-radius:18px;
+
+  padding:18px;
+
+  margin-top:15px;
+
+  box-shadow:
+    0 10px 30px #0007;
+}
+
+input{
+  width:100%;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  border:1px solid #28658f;
+
+  background:#061526;
+
+  color:white;
+
+  font-size:16px;
+
+  outline:none;
+
+  margin:5px 0 10px;
+}
+
+input:focus{
+  border-color:#23caff;
+
+  box-shadow:
+    0 0 0 3px #00bfff22;
+}
+
+button{
+  width:100%;
+
+  padding:14px;
+
+  margin:7px 0;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #007cff,
+      #00c8ff
+    );
+
+  color:white;
+
+  font-size:16px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 5px 15px #008cff33;
+}
+
+button:active{
+  transform:scale(.98);
+}
+
+button.secondary{
+  background:#123957;
+
+  border:1px solid #245d83;
+}
+
+button.danger{
+  background:
+    linear-gradient(
+      135deg,
+      #c52d4b,
+      #ff506b
+    );
+}
+
+.top{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:8px;
+}
+
+.top button{
+  width:auto;
+
+  margin:0;
+
+  padding:8px 12px;
+
+  font-size:13px;
+}
+
+.badge{
+  display:inline-block;
+
+  padding:7px 11px;
+
+  border-radius:20px;
+
+  background:#063d64;
+
+  border:1px solid #1593d0;
+
+  color:#71ddff;
+
+  font-size:13px;
+}
+
+/* ================= QUIZ ================= */
+
+.progress{
+  width:100%;
+
+  height:8px;
+
+  background:#061526;
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+  margin:15px 0;
+}
+
+.progress div{
+  height:100%;
+
+  width:0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #008cff,
+      #35dcff
+    );
+
+  transition:.3s;
+}
+
+.question{
+  font-size:20px;
+
+  font-weight:bold;
+
+  line-height:1.4;
+
+  margin:15px 0;
+}
+
+.answer{
+  background:#0b2d4c;
+
+  border:1px solid #205d8b;
+
+  text-align:left;
+}
+
+.answer.correct{
+  background:#086376;
+
+  border-color:#39deef;
+}
+
+.answer.wrong{
+  background:#70293d;
+
+  border-color:#ff6680;
+}
+
+.score{
+  text-align:center;
+
+  font-size:48px;
+
+  font-weight:bold;
+
+  color:#35d5ff;
+}
+
+/* ================= GAME ================= */
+
+#hud{
+  display:flex;
+
+  gap:6px;
+
+  margin:10px 0;
+}
+
+.hud{
+  flex:1;
+
+  text-align:center;
+
+  padding:8px 4px;
+
+  background:#0b2947;
+
+  border:1px solid #18547d;
+
+  border-radius:10px;
+
+  font-size:13px;
+}
+
+#game{
+  position:relative;
+
+  width:100%;
+
+  height:520px;
+
+  overflow:hidden;
+
+  border-radius:18px;
+
+  border:2px solid #176293;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      #0b4168 0 1px,
+      transparent 2px
+    ),
+
+    radial-gradient(
+      circle at 80% 40%,
+      #0b4168 0 1px,
+      transparent 2px
+    ),
+
+    linear-gradient(
+      #082f51,
+      #031421
+    );
+
+  background-size:
+    80px 80px,
+    120px 120px,
+    100% 100%;
+
+  touch-action:none;
+}
+
+#player{
+  position:absolute;
+
+  bottom:18px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:76px;
+
+  height:48px;
+
+  border-radius:15px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #00caff,
+      #0072ff
+    );
+
+  box-shadow:
+    0 0 22px #00caff77;
+
+  user-select:none;
+}
+
+.item{
+  position:absolute;
+
+  top:-50px;
+
+  font-size:30px;
+
+  line-height:1;
+
+  pointer-events:none;
+
+  user-select:none;
+}
+
+.game-hint{
+  text-align:center;
+
+  color:#9db9ce;
+
+  font-size:13px;
+}
+
+.game-overlay{
+  position:absolute;
+
+  inset:0;
+
+  background:#000b;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:center;
+
+  text-align:center;
+
+  padding:25px;
+
+  z-index:5;
+}
+
+.game-overlay button{
+  max-width:300px;
+}
+
+#gameOver{
+  display:none;
+}
+
+/* ================= LEADERBOARD ================= */
+
+.leaderboard-card{
+  padding:16px;
+}
+
+.leader-tabs{
+  display:flex;
+
+  gap:8px;
+
+  margin:15px 0;
+}
+
+.leader-tabs button{
+  margin:0;
+
+  padding:11px 5px;
+}
+
+.leader-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:12px;
+
+  margin:8px 0;
+
+  border-radius:14px;
+
+  background:#092642;
+
+  border:1px solid #174f78;
+
+  transition:.2s;
+}
+
+.leader-row.top1{
+  background:
+    linear-gradient(
+      135deg,
+      #164d70,
+      #087ba8
+    );
+
+  border-color:#39d8ff;
+
+  box-shadow:
+    0 0 15px #00bfff33;
+}
+
+.leader-row.top2{
+  background:#123956;
+
+  border-color:#7398ad;
+}
+
+.leader-row.top3{
+  background:#16364b;
+
+  border-color:#8a694e;
+}
+
+.rank{
+  width:42px;
+
+  text-align:center;
+
+  font-size:22px;
+
+  font-weight:bold;
+}
+
+.leader-info{
+  flex:1;
+
+  min-width:0;
+}
+
+.leader-name{
+  font-size:16px;
+
+  font-weight:bold;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.leader-date{
+  font-size:11px;
+
+  color:#82a9bd;
+
+  margin-top:3px;
+}
+
+.leader-score{
+  font-size:17px;
+
+  font-weight:bold;
+
+  color:#45d9ff;
+
+  text-align:right;
+}
+
+.no-score{
+  text-align:center;
+
+  padding:35px 10px;
+
+  color:#8baabd;
+}
+
+.no-score-icon{
+  font-size:45px;
+
+  margin-bottom:10px;
+}
+
+/* ================= ADMIN ================= */
+
+.admin-button{
+  position:fixed;
+
+  right:10px;
+
+  top:10px;
+
+  width:auto;
+
+  padding:8px 11px;
+
+  margin:0;
+
+  font-size:12px;
+
+  z-index:20;
+}
+
+.modal{
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  background:#000c;
+
+  z-index:50;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:15px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(94vw,450px);
+
+  max-height:90vh;
+
+  overflow:auto;
+
+  background:#091e34;
+
+  border:1px solid #23658f;
+
+  border-radius:18px;
+
+  padding:18px;
+}
+
+table{
+  width:100%;
+
+  border-collapse:collapse;
+
+  font-size:13px;
+}
+
+th,
+td{
+  padding:8px 5px;
+
+  border-bottom:1px solid #194867;
+
+  text-align:left;
+}
+
+.small{
+  color:#9db9ce;
+
+  font-size:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= ADMIN BUTTON ================= -->
+
+<button
+  class="admin-button"
+  onclick="openAdmin()">
+
+  ⚙ ADMIN
+
+</button>
+
+
+<main class="app">
+
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<section id="home">
+
+  <div class="logo">
+    💙
+  </div>
+
+  <h1>
+    Kenal Alief?
+  </h1>
+
+  <p class="subtitle">
+    Satu website untuk
+    <b>Quiz</b> dan
+    <b>Game</b>.<br>
+
+    Masukkan nama kamu dulu!
+  </p>
+
+
+  <div class="card">
+
+    <label>
+      Nama kamu
+    </label>
+
+    <input
+      id="nameInput"
+      maxlength="20"
+      placeholder="Tulis nama kamu..."
+    >
+
+
+    <button
+      onclick="startQuiz()">
+
+      🧠 MAIN QUIZ
+
+    </button>
+
+
+    <button
+      onclick="openGame()">
+
+      🪙 MAIN GAME
+
+    </button>
+
+
+    <button
+      class="secondary"
+      onclick="showLeaderboard()">
+
+      🏆 LEADERBOARD
+
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <p class="subtitle">
+
+      Dibuat dengan
+       oleh
+      <b>Alief</b>
+
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUIZ
+===================================================== -->
+
+<section
+  id="quiz"
+  class="hidden">
+
+  <div class="top">
+
+    <span
+      class="badge"
+      id="quizPlayer">
+    </span>
+
+
+    <button
+      class="secondary"
+      onclick="goHome()">
+
+      ⌂ Menu
+
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div id="questionNumber"></div>
+
+
+    <div class="progress">
+
+      <div
+        id="progressBar">
+      </div>
+
+    </div>
+
+
+    <div
+      class="question"
+      id="question">
+    </div>
+
+
+    <div
+      id="answers">
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     HASIL QUIZ
+===================================================== -->
+
+<section
+  id="quizResult"
+  class="hidden">
+
+  <div class="card">
+
+    <h2>
+      🎉 HASIL QUIZ
+    </h2>
+
+
+    <p
+      class="subtitle"
+      id="resultName">
+    </p>
+
+
+    <div
+      class="score"
+      id="resultScore">
+    </div>
+
+
+    <p
+      class="subtitle"
+      id="resultMessage">
+    </p>
+
+
+    <button
+      onclick="goHome()">
+
+      🏠 MENU UTAMA
+
+    </button>
+
+
+    <button
+      class="secondary"
+      onclick="showLeaderboard()">
+
+      🏆 LEADERBOARD
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     GAME
+===================================================== -->
+
+<section
+  id="gameSection"
+  class="hidden">
+
+  <div class="top">
+
+    <span
+      class="badge"
+      id="gamePlayer">
+    </span>
+
+
+    <button
+      class="secondary"
+      onclick="goHome()">
+
+      ⌂ Menu
+
+    </button>
+
+  </div>
+
+
+  <div id="hud">
+
+    <div class="hud">
+
+      🪙<br>
+      Skor<br>
+
+      <b id="gameScore">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="hud">
+
+      ❤️<br>
+      Nyawa<br>
+
+      <b id="gameLives">
+        3
+      </b>
+
+    </div>
+
+
+    <div class="hud">
+
+      🏆<br>
+      Best<br>
+
+      <b id="gameBest">
+        0
+      </b>
+
+    </div>
+
+  </div>
+
+
+  <div id="game">
+
+    <div id="player">
+      🚀
+    </div>
+
+
+    <div
+      id="gameStart"
+      class="game-overlay">
+
+      <h2>
+        🪙 TANGKAP KOIN
+      </h2>
+
+
+      <p class="small">
+
+        Tangkap 🪙 untuk mendapatkan poin.<br>
+
+        Jangan sampai terkena 💣!
+
+      </p>
+
+
+      <button
+        onclick="startGame()">
+
+        ▶ MULAI GAME
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="gameOver"
+      class="game-overlay">
+
+      <h2>
+        💀 GAME OVER
+      </h2>
+
+
+      <p>
+
+        Skor kamu:
+
+        <b id="finalScore">
+          0
+        </b>
+
+      </p>
+
+
+      <button
+        onclick="startGame()">
+
+        🔄 MAIN LAGI
+
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="goHome()">
+
+        🏠 MENU
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <p class="game-hint">
+
+    👆 Geser jari kiri/kanan
+    untuk menggerakkan pemain
+
+  </p>
+
+</section>
+
+
+<!-- =====================================================
+     LEADERBOARD
+===================================================== -->
+
+<section
+  id="leaderboard"
+  class="hidden">
+
+  <div class="top">
+
+    <span class="badge">
+
+      🏆 LEADERBOARD
+
+    </span>
+
+
+    <button
+      class="secondary"
+      onclick="goHome()">
+
+      ← Menu
+
+    </button>
+
+  </div>
+
+
+  <div class="card leaderboard-card">
+
+    <h2>
+      🏆 TOP PEMAIN
+    </h2>
+
+
+    <p class="subtitle">
+
+      Siapa yang paling jago
+      mengenal Alief?
+
+    </p>
+
+
+    <div class="leader-tabs">
+
+      <button
+        id="quizTab"
+        onclick="showQuizLeaderboard()">
+
+        🧠 QUIZ
+
+      </button>
+
+
+      <button
+        id="gameTab"
+        class="secondary"
+        onclick="showGameLeaderboard()">
+
+        🪙 GAME
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="leaderboardContent">
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     ADMIN MODAL
+===================================================== -->
+
+<div
+  class="modal"
+  id="adminModal">
+
+
+  <div class="modal-box">
+
+
+    <h2>
+      ⚙ ADMIN
+    </h2>
+
+
+    <!-- LOGIN -->
+
+    <div id="adminLogin">
+
+      <label>
+        Username
+      </label>
+
+
+      <input
+        id="adminUsername"
+        placeholder="Username"
+      >
+
+
+      <label>
+        Password
+      </label>
+
+
+      <input
+        id="adminPassword"
+        type="password"
+        placeholder="Password"
+      >
+
+
+      <button
+        onclick="loginAdmin()">
+
+        🔐 LOGIN
+
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="closeAdmin()">
+
+        TUTUP
+
+      </button>
+
+
+      <p class="small">
+
+        Default:
+        admin / 12345
+
+      </p>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+
+    <div
+      id="adminPanel"
+      class="hidden">
+
+
+      <h3>
+        🏆 Leaderboard Quiz
+      </h3>
+
+
+      <div
+        id="quizBoard">
+      </div>
+
+
+      <button
+        class="danger"
+        onclick="clearQuizBoard()">
+
+        🗑 HAPUS LEADERBOARD QUIZ
+
+      </button>
+
+
+      <h3>
+        🪙 Leaderboard Game
+      </h3>
+
+
+      <div
+        id="gameBoard">
+      </div>
+
+
+      <button
+        class="danger"
+        onclick="clearGameBoard()">
+
+        🗑 HAPUS LEADERBOARD GAME
+
+      </button>
+
+
+      <h3>
+        🎮 Pengaturan Game
+      </h3>
+
+
+      <label>
+        Kecepatan
+      </label>
+
+
+      <input
+        id="gameSpeed"
+        type="number"
+        min="1"
+        max="15"
+      >
+
+
+      <label>
+        Nilai koin
+      </label>
+
+
+      <input
+        id="coinValue"
+        type="number"
+        min="1"
+        max="100"
+      >
+
+
+      <label>
+        Jumlah nyawa
+      </label>
+
+
+      <input
+        id="lifeCount"
+        type="number"
+        min="1"
+        max="10"
+      >
+
+
+      <button
+        onclick="saveGameSettings()">
+
+        💾 SIMPAN PENGATURAN
+
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="closeAdmin()">
+
+        TUTUP ADMIN
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+let audioCtx = null;
+
+
+function getAudio(){
+
+  if(!audioCtx){
+
+    audioCtx =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+  }
+
+
+  if(
+    audioCtx.state ===
+    "suspended"
+  ){
+
+    audioCtx.resume();
+
+  }
+
+
+  return audioCtx;
+
+}
+
+
+function sound(type){
+
+  const ctx =
+    getAudio();
+
+
+  const osc =
+    ctx.createOscillator();
+
+
+  const gain =
+    ctx.createGain();
+
+
+  osc.connect(gain);
+
+  gain.connect(
+    ctx.destination
+  );
+
+
+  const now =
+    ctx.currentTime;
+
+
+  /* BENAR */
+
+  if(type === "correct"){
+
+    osc.type =
+      "sine";
+
+
+    osc.frequency.setValueAtTime(
+      520,
+      now
+    );
+
+
+    osc.frequency.setValueAtTime(
+      780,
+      now + .12
+    );
+
+
+    gain.gain.setValueAtTime(
+      .18,
+      now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      now + .35
+    );
+
+
+    osc.start(now);
+
+    osc.stop(
+      now + .35
+    );
+
+  }
+
+
+  /* SALAH */
+
+  else if(type === "wrong"){
+
+    osc.type =
+      "sawtooth";
+
+
+    osc.frequency.setValueAtTime(
+      260,
+      now
+    );
+
+
+    osc.frequency.exponentialRampToValueAtTime(
+      80,
+      now + .4
+    );
+
+
+    gain.gain.setValueAtTime(
+      .18,
+      now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      now + .45
+    );
+
+
+    osc.start(now);
+
+    osc.stop(
+      now + .45
+    );
+
+  }
+
+
+  /* KOIN */
+
+  else if(type === "coin"){
+
+    osc.type =
+      "sine";
+
+
+    osc.frequency.setValueAtTime(
+      650,
+      now
+    );
+
+
+    osc.frequency.setValueAtTime(
+      950,
+      now + .08
+    );
+
+
+    gain.gain.setValueAtTime(
+      .15,
+      now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      now + .22
+    );
+
+
+    osc.start(now);
+
+    osc.stop(
+      now + .22
+    );
+
+  }
+
+
+  /* BOM */
+
+  else if(type === "bomb"){
+
+    osc.type =
+      "square";
+
+
+    osc.frequency.setValueAtTime(
+      150,
+      now
+    );
+
+
+    osc.frequency.exponentialRampToValueAtTime(
+      40,
+      now + .55
+    );
+
+
+    gain.gain.setValueAtTime(
+      .23,
+      now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      now + .6
+    );
+
+
+    osc.start(now);
+
+    osc.stop(
+      now + .6
+    );
+
+  }
+
+
+  /* GAME OVER */
+
+  else if(type === "gameover"){
+
+    osc.type =
+      "sawtooth";
+
+
+    osc.frequency.setValueAtTime(
+      400,
+      now
+    );
+
+
+    osc.frequency.exponentialRampToValueAtTime(
+      60,
+      now + 1
+    );
+
+
+    gain.gain.setValueAtTime(
+      .2,
+      now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      now + 1.1
+    );
+
+
+    osc.start(now);
+
+    osc.stop(
+      now + 1.1
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   DATA QUIZ
+===================================================== */
+
+const quizQuestions = [
+
+  {
+    question:
+      "Alief lahir tahun berapa?",
+
+    answers:[
+      "2010",
+      "2011",
+      "2014",
+      "2012"
+    ],
+
+    correct:1
+  },
+
+
+  {
+    question:
+      "Alief suka apa kalau di rumah?",
+
+    answers:[
+      "Main dan makan",
+      "Belajar",
+      "Rebahan",
+      "Tidur"
+    ],
+
+    correct:0
+  },
+
+
+  {
+    question:
+      "Alief ganteng ga?",
+
+    answers:[
+      "iyaa",
+      "biasa aja",
+      "ganteng banget",
+      "okey la"
+    ],
+
+    correct:2
+  },
+
+
+  {
+    question:
+      "Apa warna favorit Alief?",
+
+    answers:[
+      "Merah",
+      "Biru",
+      "Hijau",
+      "Hitam"
+    ],
+
+    correct:1
+  },
+
+
+  {
+    question:
+      "Apa makanan yang paling disukai Alief?",
+
+    answers:[
+      "Ramen",
+      "Nasi goreng",
+      "Pizza",
+      "Burger"
+    ],
+
+    correct:1
+  },
+
+
+  {
+    question:
+      "Kalau sedang bosan, Alief biasanya suka?",
+
+    answers:[
+      "Main game",
+      "Belajar",
+      "Bersih-bersih",
+      "Membaca"
+    ],
+
+    correct:0
+  },
+
+
+  {
+    question:
+      "Game apa yang sering Alief main?",
+
+    answers:[
+      "ML",
+      "FF",
+      "PUBG",
+      "Pou"
+    ],
+
+    correct:0
+  },
+
+
+  {
+    question:
+      "Menurut kamu, Alief itu keren ga?",
+
+    answers:[
+      "Iya, sangat keren 😎",
+      "Lumayan",
+      "Biasa saja",
+      "Tidak"
+    ],
+
+    correct:1
+  },
+
+
+  {
+    question:
+      "Alief lebih suka bermain atau belajar?",
+
+    answers:[
+      "Bermain",
+      "Belajar",
+      "Satu dan dua",
+      "Tidur"
+    ],
+
+    correct:2
+  },
+
+
+  {
+    question:
+      "Alief itu pinter ga?",
+
+    answers:[
+      "Sangat pinter 🔥",
+      "Lumayan",
+      "Sedikit",
+      "Tidak pinter"
+    ],
+
+    correct:0
+  },
+
+
+  {
+    question:
+      "Seberapa kenal kamu dengan Alief dan Sasuke?",
+
+    answers:[
+      "Sangat kenal 🔥",
+      "Lumayan",
+      "Sedikit",
+      "Tidak kenal"
+    ],
+
+    correct:0
+  }
+
+];
+
+
+/* =====================================================
+   VARIABEL
+===================================================== */
+
+let currentName = "";
+
+let currentQuestion = 0;
+
+let quizScore = 0;
+
+let gameRunning = false;
+
+let gameScore = 0;
+
+let gameLives = 3;
+
+let gameLoop = null;
+
+let spawnLoop = null;
+
+let gameItems = [];
+
+
+let gameSettings =
+  JSON.parse(
+    localStorage.getItem(
+      "coinGameSettings"
+    )
+  ) ||
+  {
+    speed:5,
+    coinValue:10,
+    lives:3
+  };
+
+
+/* =====================================================
+   HELPER
+===================================================== */
+
+function $(id){
+
+  return document.getElementById(id);
+
+}
+
+
+function showSection(id){
+
+  const sections = [
+
+    "home",
+
+    "quiz",
+
+    "quizResult",
+
+    "gameSection",
+
+    "leaderboard"
+
+  ];
+
+
+  sections.forEach(
+    function(section){
+
+      $(section)
+        .classList
+        .add("hidden");
+
+    }
+  );
+
+
+  $(id)
+    .classList
+    .remove("hidden");
+
+}
+
+
+function getPlayerName(){
+
+  const name =
+    $("nameInput")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert(
+      "Masukkan nama kamu dulu!"
+    );
+
+    $("nameInput")
+      .focus();
+
+    return false;
+
+  }
+
+
+  currentName =
+    name.substring(
+      0,
+      20
+    );
+
+
+  localStorage.setItem(
+    "lastName",
+    currentName
+  );
+
+
+  return true;
+
+}
+
+
+function goHome(){
+
+  stopGame();
+
+
+  $("gameStart")
+    .style
+    .display =
+    "flex";
+
+
+  $("gameOver")
+    .style
+    .display =
+    "none";
+
+
+  showSection(
+    "home"
+  );
+
+}
+
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+function startQuiz(){
+
+  if(
+    !getPlayerName()
+  ){
+
+    return;
+
+  }
+
+
+  currentQuestion = 0;
+
+  quizScore = 0;
+
+
+  $("quizPlayer")
+    .textContent =
+    "👤 " +
+    currentName;
+
+
+  showSection(
+    "quiz"
+  );
+
+
+  renderQuestion();
+
+}
+
+
+function renderQuestion(){
+
+  const question =
+    quizQuestions[
+      currentQuestion
+    ];
+
+
+  $("questionNumber")
+    .textContent =
+
+    "Pertanyaan " +
+
+    (currentQuestion + 1) +
+
+    " dari " +
+
+    quizQuestions.length;
+
+
+  $("progressBar")
+    .style
+    .width =
+
+    (
+      currentQuestion /
+      quizQuestions.length *
+      100
+
+    ) + "%";
+
+
+  $("question")
+    .textContent =
+    question.question;
+
+
+  $("answers")
+    .innerHTML =
+    "";
+
+
+  question.answers.forEach(
+    function(
+      answer,
+      index
+    ){
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "answer";
+
+
+      button.textContent =
+        answer;
+
+
+      button.onclick =
+        function(){
+
+          answerQuestion(
+            index,
+            button
+          );
+
+        };
+
+
+      $("answers")
+        .appendChild(
+          button
+        );
+
+    }
+  );
+
+}
+
+
+function answerQuestion(
+  selected,
+  clickedButton
+){
+
+  const question =
+    quizQuestions[
+      currentQuestion
+    ];
+
+
+  const buttons =
+    document.querySelectorAll(
+      ".answer"
+    );
+
+
+  buttons.forEach(
+    function(button){
+
+      button.disabled =
+        true;
+
+    }
+  );
+
+
+  if(
+    selected ===
+    question.correct
+  ){
+
+    quizScore++;
+
+
+    clickedButton
+      .classList
+      .add("correct");
+
+
+    sound(
+      "correct"
+    );
+
+  }
+
+  else{
+
+    clickedButton
+      .classList
+      .add("wrong");
+
+
+    buttons[
+      question.correct
+    ]
+      .classList
+      .add("correct");
+
+
+    sound(
+      "wrong"
+    );
+
+  }
+
+
+  setTimeout(
+    function(){
+
+      currentQuestion++;
+
+
+      if(
+        currentQuestion <
+        quizQuestions.length
+      ){
+
+        renderQuestion();
+
+      }
+
+      else{
+
+        finishQuiz();
+
+      }
+
+    },
+    550
+  );
+
+}
+
+
+function finishQuiz(){
+
+  $("progressBar")
+    .style
+    .width =
+    "100%";
+
+
+  const leaderboard =
+    JSON.parse(
+      localStorage.getItem(
+        "leaderboardAlief"
+      ) || "[]"
+    );
+
+
+  leaderboard.push({
+
+    name:
+      currentName,
+
+    score:
+      quizScore,
+
+    total:
+      quizQuestions.length,
+
+    date:
+      new Date()
+        .toLocaleDateString()
+
+  });
+
+
+  leaderboard.sort(
+    function(a,b){
+
+      return b.score -
+        a.score;
+
+    }
+  );
+
+
+  localStorage.setItem(
+
+    "leaderboardAlief",
+
+    JSON.stringify(
+      leaderboard
+        .slice(
+          0,
+          20
+        )
+    )
+
+  );
+
+
+  $("resultName")
+    .textContent =
+    "Hebat, " +
+    currentName +
+    "!";
+
+
+  $("resultScore")
+    .textContent =
+
+    quizScore +
+    " / " +
+    quizQuestions.length;
+
+
+  const percentage =
+    quizScore /
+    quizQuestions.length *
+    100;
+
+
+  if(
+    percentage === 100
+  ){
+
+    $("resultMessage")
+      .textContent =
+
+      "👑 SEMPURNA! Kamu benar-benar kenal Alief!";
+
+  }
+
+  else if(
+    percentage >= 80
+  ){
+
+    $("resultMessage")
+      .textContent =
+
+      "🔥 Gila! Kamu sangat mengenal Alief!";
+
+  }
+
+  else if(
+    percentage >= 60
+  ){
+
+    $("resultMessage")
+      .textContent =
+
+      "😎 Lumayan! Kamu cukup mengenal Alief.";
+
+  }
+
+  else{
+
+    $("resultMessage")
+      .textContent =
+
+      "😂 Waduh, masih harus lebih kenal Alief!";
+
+  }
+
+
+  showSection(
+    "quizResult"
+  );
+
+}
+
+
+/* =====================================================
+   GAME
+===================================================== */
+
+function openGame(){
+
+  if(
+    !getPlayerName()
+  ){
+
+    return;
+
+  }
+
+
+  $("gamePlayer")
+    .textContent =
+    "👤 " +
+    currentName;
+
+
+  showSection(
+    "gameSection"
+  );
+
+
+  $("gameStart")
+    .style
+    .display =
+    "flex";
+
+
+  $("gameOver")
+    .style
+    .display =
+    "none";
+
+
+  updateGameHUD();
+
+  updateBestScore();
+
+}
+
+
+function startGame(){
+
+  stopGame();
+
+
+  gameScore = 0;
+
+
+  gameLives =
+    Number(
+      gameSettings.lives
+    ) || 3;
+
+
+  gameItems = [];
+
+
+  document
+    .querySelectorAll(
+      ".item"
+    )
+    .forEach(
+      function(item){
+
+        item.remove();
+
+      }
+    );
+
+
+  $("gameStart")
+    .style
+    .display =
+    "none";
+
+
+  $("gameOver")
+    .style
+    .display =
+    "none";
+
+
+  updateGameHUD();
+
+  updateBestScore();
+
+
+  gameRunning =
+    true;
+
+
+  spawnLoop =
+    setInterval(
+
+      spawnGameItem,
+
+      Math.max(
+        280,
+        900 -
+        gameSettings.speed * 60
+      )
+
+    );
+
+
+  gameLoop =
+    requestAnimationFrame(
+      updateGame
+    );
+
+}
+
+
+function stopGame(){
+
+  gameRunning =
+    false;
+
+
+  if(gameLoop){
+
+    cancelAnimationFrame(
+      gameLoop
+    );
+
+  }
+
+
+  if(spawnLoop){
+
+    clearInterval(
+      spawnLoop
+    );
+
+  }
+
+
+  gameLoop =
+    null;
+
+
+  spawnLoop =
+    null;
+
+}
+
+
+function updateGameHUD(){
+
+  $("gameScore")
+    .textContent =
+    gameScore;
+
+
+  $("gameLives")
+    .textContent =
+    gameLives;
+
+}
+
+
+function updateBestScore(){
+
+  const scores =
+    JSON.parse(
+      localStorage.getItem(
+        "coinGameScores"
+      ) || "[]"
+    );
+
+
+  let best =
+    0;
+
+
+  scores.forEach(
+    function(item){
+
+      if(
+        Number(item.score) >
+        best
+      ){
+
+        best =
+          Number(item.score);
+
+      }
+
+    }
+  );
+
+
+  $("gameBest")
+    .textContent =
+    best;
+
+}
+
+
+function spawnGameItem(){
+
+  if(
+    !gameRunning
+  ){
+
+    return;
+
+  }
+
+
+  const item =
+    document.createElement(
+      "div"
+    );
+
+
+  const isBomb =
+    Math.random() <
+    0.20;
+
+
+  item.className =
+    "item";
+
+
+  item.textContent =
+    isBomb
+    ?
+    "💣"
+    :
+    "🪙";
+
+
+  const gameWidth =
+    $("game")
+      .clientWidth;
+
+
+  const x =
+    Math.random() *
+    (
+      gameWidth -
+      40
+    );
+
+
+  item.style.left =
+    x + "px";
+
+
+  item.style.top =
+    "-45px";
+
+
+  $("game")
+    .appendChild(
+      item
+    );
+
+
+  gameItems.push({
+
+    element:
+      item,
+
+    x:
+      x,
+
+    y:
+      -45,
+
+    bomb:
+      isBomb
+
+  });
+
+}
+
+
+function updateGame(){
+
+  if(
+    !gameRunning
+  ){
+
+    return;
+
+  }
+
+
+  const game =
+    $("game");
+
+
+  const player =
+    $("player");
+
+
+  const gameRect =
+    game.getBoundingClientRect();
+
+
+  const playerRect =
+    player.getBoundingClientRect();
+
+
+  const playerLeft =
+    playerRect.left -
+    gameRect.left;
+
+
+  const playerRight =
+    playerRect.right -
+    gameRect.left;
+
+
+  const playerTop =
+    playerRect.top -
+    gameRect.top;
+
+
+  const playerBottom =
+    playerRect.bottom -
+    gameRect.top;
+
+
+  for(
+    let i =
+      gameItems.length - 1;
+
+    i >= 0;
+
+    i--
+  ){
+
+    const item =
+      gameItems[i];
+
+
+    item.y +=
+      Number(
+        gameSettings.speed
+      );
+
+
+    item.element.style.top =
+      item.y + "px";
+
+
+    const itemLeft =
+      item.x;
+
+
+    const itemRight =
+      item.x + 30;
+
+
+    const itemTop =
+      item.y;
+
+
+    const itemBottom =
+      item.y + 30;
+
+
+    const collision =
+
+      itemRight >
+      playerLeft &&
+
+      itemLeft <
+      playerRight &&
+
+      itemBottom >
+      playerTop &&
+
+      itemTop <
+      playerBottom;
+
+
+    if(collision){
+
+      /* BOM */
+
+      if(
+        item.bomb
+      ){
+
+        gameLives--;
+
+
+        sound(
+          "bomb"
+        );
+
+
+        updateGameHUD();
+
+
+        item.element
+          .remove();
+
+
+        gameItems.splice(
+          i,
+          1
+        );
+
+
+        if(
+          gameLives <= 0
+        ){
+
+          gameOver();
+
+          return;
+
+        }
+
+      }
+
+      /* KOIN */
+
+      else{
+
+        gameScore +=
+
+          Number(
+            gameSettings.coinValue
+          ) || 10;
+
+
+        sound(
+          "coin"
+        );
+
+
+        updateGameHUD();
+
+
+        item.element
+          .remove();
+
+
+        gameItems.splice(
+          i,
+          1
+        );
+
+      }
+
+
+      continue;
+
+    }
+
+
+    if(
+      item.y >
+      game.clientHeight + 30
+    ){
+
+      item.element
+        .remove();
+
+
+      gameItems.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+
+  if(
+    gameRunning
+  ){
+
+    gameLoop =
+      requestAnimationFrame(
+        updateGame
+      );
+
+  }
+
+}
+
+
+function gameOver(){
+
+  sound(
+    "gameover"
+  );
+
+
+  stopGame();
+
+
+  $("finalScore")
+    .textContent =
+    gameScore;
+
+
+  $("gameOver")
+    .style
+    .display =
+    "flex";
+
+
+  const leaderboard =
+    JSON.parse(
+      localStorage.getItem(
+        "coinGameScores"
+      ) || "[]"
+    );
+
+
+  leaderboard.push({
+
+    name:
+      currentName,
+
+    score:
+      gameScore,
+
+    date:
+      new Date()
+        .toLocaleDateString()
+
+  });
+
+
+  leaderboard.sort(
+    function(a,b){
+
+      return b.score -
+        a.score;
+
+    }
+  );
+
+
+  localStorage.setItem(
+
+    "coinGameScores",
+
+    JSON.stringify(
+      leaderboard
+        .slice(
+          0,
+          20
+        )
+    )
+
+  );
+
+
+  updateBestScore();
+
+}
+
+
+/* =====================================================
+   GERAK PLAYER
+===================================================== */
+
+let dragging =
+  false;
+
+
+$("game")
+  .addEventListener(
+    "pointerdown",
+    function(event){
+
+      dragging =
+        true;
+
+
+      movePlayer(
+        event
+      );
+
+    }
+  );
+
+
+$("game")
+  .addEventListener(
+    "pointermove",
+    function(event){
+
+      if(
+        dragging
+      ){
+
+        movePlayer(
+          event
+        );
+
+      }
+
+    }
+  );
+
+
+window.addEventListener(
+  "pointerup",
+  function(){
+
+    dragging =
+      false;
+
+  }
+);
+
+
+function movePlayer(
+  event
+){
+
+  if(
+    !gameRunning
+  ){
+
+    return;
+
+  }
+
+
+  const rect =
+    $("game")
+      .getBoundingClientRect();
+
+
+  let x =
+    event.clientX -
+    rect.left;
+
+
+  const half =
+    38;
+
+
+  x =
+    Math.max(
+      half,
+      Math.min(
+        rect.width -
+        half,
+        x
+      )
+    );
+
+
+  $("player")
+    .style
+    .left =
+    x + "px";
+
+}
+
+
+/* =====================================================
+   LEADERBOARD
+===================================================== */
+
+function showLeaderboard(){
+
+  showSection(
+    "leaderboard"
+  );
+
+
+  showQuizLeaderboard();
+
+}
+
+
+function showQuizLeaderboard(){
+
+  $("quizTab")
+    .classList
+    .remove(
+      "secondary"
+    );
+
+
+  $("gameTab")
+    .classList
+    .add(
+      "secondary"
+    );
+
+
+  const data =
+    JSON.parse(
+      localStorage.getItem(
+        "leaderboardAlief"
+      ) || "[]"
+    );
+
+
+  const box =
+    $("leaderboardContent");
+
+
+  if(
+    data.length === 0
+  ){
+
+    box.innerHTML = `
+
+      <div class="no-score">
+
+        <div class="no-score-icon">
+          🧠
+        </div>
+
+        <b>
+          Belum ada skor Quiz
+        </b>
+
+        <p>
+          Jadilah pemain pertama!
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+
+    data
+      .slice(
+        0,
+        10
+      )
+      .map(
+        function(
+          item,
+          index
+        ){
+
+          let medal;
+
+
+          if(
+            index === 0
+          ){
+
+            medal =
+              "🥇";
+
+          }
+
+          else if(
+            index === 1
+          ){
+
+            medal =
+              "🥈";
+
+          }
+
+          else if(
+            index === 2
+          ){
+
+            medal =
+              "🥉";
+
+          }
+
+          else{
+
+            medal =
+              index + 1;
+
+          }
+
+
+          let rankClass =
+            "";
+
+
+          if(
+            index === 0
+          ){
+
+            rankClass =
+              "top1";
+
+          }
+
+          else if(
+            index === 1
+          ){
+
+            rankClass =
+              "top2";
+
+          }
+
+          else if(
+            index === 2
+          ){
+
+            rankClass =
+              "top3";
+
+          }
+
+
+          return `
+
+            <div
+              class="leader-row ${rankClass}">
+
+              <div class="rank">
+                ${medal}
+              </div>
+
+
+              <div class="leader-info">
+
+                <div class="leader-name">
+                  ${escapeHTML(item.name)}
+                </div>
+
+                <div class="leader-date">
+                  ${item.date || ""}
+                </div>
+
+              </div>
+
+
+              <div class="leader-score">
+
+                ${item.score}/${item.total}
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+function showGameLeaderboard(){
+
+  $("quizTab")
+    .classList
+    .add(
+      "secondary"
+    );
+
+
+  $("gameTab")
+    .classList
+    .remove(
+      "secondary"
+    );
+
+
+  const data =
+    JSON.parse(
+      localStorage.getItem(
+        "coinGameScores"
+      ) || "[]"
+    );
+
+
+  const box =
+    $("leaderboardContent");
+
+
+  if(
+    data.length === 0
+  ){
+
+    box.innerHTML = `
+
+      <div class="no-score">
+
+        <div class="no-score-icon">
+          🪙
+        </div>
+
+        <b>
+          Belum ada skor Game
+        </b>
+
+        <p>
+          Jadilah pemain pertama!
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+
+    data
+      .slice(
+        0,
+        10
+      )
+      .map(
+        function(
+          item,
+          index
+        ){
+
+          let medal;
+
+
+          if(
+            index === 0
+          ){
+
+            medal =
+              "🥇";
+
+          }
+
+          else if(
+            index === 1
+          ){
+
+            medal =
+              "🥈";
+
+          }
+
+          else if(
+            index === 2
+          ){
+
+            medal =
+              "🥉";
+
+          }
+
+          else{
+
+            medal =
+              index + 1;
+
+          }
+
+
+          let rankClass =
+            "";
+
+
+          if(
+            index === 0
+          ){
+
+            rankClass =
+              "top1";
+
+          }
+
+          else if(
+            index === 1
+          ){
+
+            rankClass =
+              "top2";
+
+          }
+
+          else if(
+            index === 2
+          ){
+
+            rankClass =
+              "top3";
+
+          }
+
+
+          return `
+
+            <div
+              class="leader-row ${rankClass}">
+
+              <div class="rank">
+                ${medal}
+              </div>
+
+
+              <div class="leader-info">
+
+                <div class="leader-name">
+                  ${escapeHTML(item.name)}
+                </div>
+
+                <div class="leader-date">
+                  ${item.date || ""}
+                </div>
+
+              </div>
+
+
+              <div class="leader-score">
+
+                🪙 ${item.score}
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+function openAdmin(){
+
+  $("adminModal")
+    .classList
+    .add(
+      "show"
+    );
+
+
+  $("adminLogin")
+    .classList
+    .remove(
+      "hidden"
+    );
+
+
+  $("adminPanel")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  $("adminUsername")
+    .value =
+    "";
+
+
+  $("adminPassword")
+    .value =
+    "";
+
+}
+
+
+function closeAdmin(){
+
+  $("adminModal")
+    .classList
+    .remove(
+      "show"
+    );
+
+}
+
+
+function loginAdmin(){
+
+  const username =
+    $("adminUsername")
+      .value;
+
+
+  const password =
+    $("adminPassword")
+      .value;
+
+
+  if(
+    username === "admin" &&
+    password === "12345"
+  ){
+
+    $("adminLogin")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    $("adminPanel")
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    loadAdmin();
+
+  }
+
+  else{
+
+    alert(
+      "Username atau password salah!"
+    );
+
+  }
+
+}
+
+
+function loadAdmin(){
+
+  $("gameSpeed")
+    .value =
+    gameSettings.speed;
+
+
+  $("coinValue")
+    .value =
+    gameSettings.coinValue;
+
+
+  $("lifeCount")
+    .value =
+    gameSettings.lives;
+
+
+  const quiz =
+    JSON.parse(
+      localStorage.getItem(
+        "leaderboardAlief"
+      ) || "[]"
+    );
+
+
+  const game =
+    JSON.parse(
+      localStorage.getItem(
+        "coinGameScores"
+      ) || "[]"
+    );
+
+
+  $("quizBoard")
+    .innerHTML =
+    makeTable(
+      quiz,
+      true
+    );
+
+
+  $("gameBoard")
+    .innerHTML =
+    makeTable(
+      game,
+      false
+    );
+
+}
+
+
+function makeTable(
+  data,
+  isQuiz
+){
+
+  if(
+    data.length === 0
+  ){
+
+    return `
+
+      <p class="small">
+        Belum ada data.
+      </p>
+
+    `;
+
+  }
+
+
+  let html = `
+
+    <table>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Nama</th>
+
+        <th>Skor</th>
+
+      </tr>
+
+  `;
+
+
+  data.forEach(
+    function(
+      item,
+      index
+    ){
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${index + 1}
+          </td>
+
+          <td>
+            ${escapeHTML(item.name)}
+          </td>
+
+          <td>
+
+            ${
+              isQuiz
+
+              ?
+
+              item.score +
+              "/" +
+              item.total
+
+              :
+
+              item.score
+
+            }
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  html +=
+    "</table>";
+
+
+  return html;
+
+}
+
+
+function escapeHTML(
+  text
+){
+
+  return String(text)
+    .replace(
+      /[&<>"']/g,
+      function(character){
+
+        return {
+
+          "&":
+            "&amp;",
+
+          "<":
+            "&lt;",
+
+          ">":
+            "&gt;",
+
+          '"':
+            "&quot;",
+
+          "'":
+            "&#039;"
+
+        }[character];
+
+      }
+    );
+
+}
+
+
+function clearQuizBoard(){
+
+  if(
+    confirm(
+      "Hapus semua leaderboard Quiz?"
+    )
+  ){
+
+    localStorage.removeItem(
+      "leaderboardAlief"
+    );
+
+
+    loadAdmin();
+
+  }
+
+}
+
+
+function clearGameBoard(){
+
+  if(
+    confirm(
+      "Hapus semua leaderboard Game?"
+    )
+  ){
+
+    localStorage.removeItem(
+      "coinGameScores"
+    );
+
+
+    loadAdmin();
+
+
+    updateBestScore();
+
+  }
+
+}
+
+
+function saveGameSettings(){
+
+  gameSettings = {
+
+    speed:
+      Math.max(
+        1,
+        Math.min(
+          15,
+          Number(
+            $("gameSpeed")
+              .value
+          ) || 5
+        )
+      ),
+
+
+    coinValue:
+      Math.max(
+        1,
+        Math.min(
+          100,
+          Number(
+            $("coinValue")
+              .value
+          ) || 10
+        )
+      ),
+
+
+    lives:
+      Math.max(
+        1,
+        Math.min(
+          10,
+          Number(
+            $("lifeCount")
+              .value
+          ) || 3
+        )
+      )
+
+  };
+
+
+  localStorage.setItem(
+
+    "coinGameSettings",
+
+    JSON.stringify(
+      gameSettings
+    )
+
+  );
+
+
+  alert(
+    "Pengaturan berhasil disimpan! 💙"
+  );
+
+}
+
+
+/* =====================================================
+   LOAD NAMA
+===================================================== */
+
+$("nameInput")
+  .value =
+  localStorage.getItem(
+    "lastName"
+  ) || "";
+
+</script>
+
+</body>
+</html>
